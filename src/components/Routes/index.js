@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, lazy, Suspense } from 'react'
 import {
   BrowserRouter as Router,
   Redirect,
@@ -6,13 +6,15 @@ import {
   Switch,
 } from 'react-router-dom'
 import { CSSTransition, TransitionGroup } from 'react-transition-group'
-import AdminPage from '../AdminPage'
 import Header from '../Header'
 import LoginPage from '../LoginPage'
 import NotFoundPage from '../NotFoundPage'
 import ProductPage from '../ProductPage'
 import ProductsPage from '../ProductsPage'
+
 import './index.css'
+
+const AdminPage = lazy(() => import('../AdminPage'))
 
 const Routes = props => {
   const [loggedIn, setLoggedIn] = useState(true)
@@ -23,7 +25,7 @@ const Routes = props => {
       <TransitionGroup>
         <CSSTransition
           key={props.location.key}
-          timeout={500}
+          timeout={5000}
           classNames="animate">
           <Switch>
             <Redirect exact={true} from="/" to="/products" />
@@ -34,7 +36,14 @@ const Routes = props => {
 
             <Route path="/admin">
               {console.log('loggedIn :', loggedIn)}
-              {loggedIn ? <AdminPage /> : <Redirect to="/login" />}
+              {loggedIn ? (
+                <Suspense
+                  fallback={<div className="Page-container">Loading..</div>}>
+                  <AdminPage />
+                </Suspense>
+              ) : (
+                <Redirect to="/login" />
+              )}
             </Route>
 
             <Route component={NotFoundPage} />
