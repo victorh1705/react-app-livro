@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useParams, Prompt } from 'react-router-dom'
 import { products } from '../../data/products'
+import Product from '../Product'
 
 const ProductPage = () => {
   const [product, setProduct] = useState({})
@@ -22,19 +23,11 @@ const ProductPage = () => {
     <div className="page-container">
       <Prompt when={!added} message={navAwayMessage} />
       {product ? (
-        <React.Fragment>
-          <h1>{product.name}</h1>
-          <p>{product.description}</p>
-          <p className="product-price">
-            {new Intl.NumberFormat('en-US', {
-              currency: 'USD',
-              style: 'currency',
-            }).format(product.price)}
-          </p>
-          {!added && (
-            <button onClick={() => setAdded(true)}>Add to basket</button>
-          )}
-        </React.Fragment>
+        <Product
+          product={product}
+          inBasket={added}
+          onAddToBasket={() => setAdded(true)}
+        />
       ) : (
         <p>Product not found!</p>
       )}
