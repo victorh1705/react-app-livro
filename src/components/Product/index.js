@@ -4,6 +4,7 @@ import PropTypes from 'prop-types'
 import '../../data/products'
 
 import './index.css'
+import Tabs, { Tab } from '../Tabs'
 
 const Product = ({ product, inBasket, onAddToBasket }) => {
   const handleAddClick = () => {
@@ -13,6 +14,14 @@ const Product = ({ product, inBasket, onAddToBasket }) => {
   return (
     <>
       <h1>{product.name}</h1>
+      <Tabs>
+        <Tab name="Description" initialActive={true}>
+          <b>Description</b>
+        </Tab>
+        <Tab name="Reviews">
+          <b>Reviews</b>
+        </Tab>
+      </Tabs>
       <p>{product.description}</p>
       <div>
         <ul className="product-reviews">
