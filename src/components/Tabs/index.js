@@ -2,28 +2,23 @@ import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 
 import './index.css'
-import { preProcessFile } from 'typescript'
 
 const TabsContext = React.createContext({
   activeName: null,
   handleTabClick: null,
 })
 
-export const Tab = ({ name, initialActive, children }) => {
+const Tab = ({ name, initialActive, children }) => {
   return (
     <TabsContext.Consumer>
       {context => {
-        const activeName = context.activeName
-          ? context.activeName
-          : initialActive
-          ? name
-          : ''
+        const activeName = context?.activeName || initialActive || name || ''
 
         const handleTabClick = e => {
-          if (context.handleTabClick) {
-            context.handleTabClick(name)
-          }
+          console.log('clicou')
+          context.handleTabClick(name)
         }
+        console.log('ativo :', activeName)
 
         return (
           <li
@@ -42,30 +37,24 @@ Tab.propTypes = {
   initialActive: PropTypes.bool,
 }
 
-const Tabs = ({ headings, name, initialActive, children }) => {
+const Tabs = ({ headings, children }) => {
   const [activeName, setActiveName] = useState(
-    headings && headings.length > 0 ? headings[0] : '',
+    headings?.length > 0 ? headings[0] : '',
   )
 
   console.log('activeName :', activeName)
-
-  const teste = () => 'ewew'
 
   const handleTabClick = name => {
     setActiveName(name)
   }
 
   return (
-    <TabsContext.Provider value={{ active: activeName, handleTabClick }}>
+    <TabsContext.Provider
+      value={{ activeName: activeName || '', handleTabClick }}>
       <ul className="tabs">{children}</ul>
     </TabsContext.Provider>
   )
 }
 
-Tabs.propTypes = {
-  headings: PropTypes.array,
-  name: PropTypes.string,
-  initialActive: PropTypes.func,
-}
-
+Tabs.Tab = Tab
 export default Tabs

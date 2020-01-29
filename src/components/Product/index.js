@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import '../../data/products'
 
 import './index.css'
-import Tabs, { Tab } from '../Tabs'
+import Tabs from '../Tabs'
 
 const Product = ({ product, inBasket, onAddToBasket }) => {
   const handleAddClick = () => {
@@ -15,12 +15,12 @@ const Product = ({ product, inBasket, onAddToBasket }) => {
     <>
       <h1>{product.name}</h1>
       <Tabs>
-        <Tab name="Description" initialActive={true}>
+        <Tabs.Tab name="Description" initialActive={true}>
           <b>Description</b>
-        </Tab>
-        <Tab name="Reviews">
+        </Tabs.Tab>
+        <Tabs.Tab name="Reviews">
           <b>Reviews</b>
-        </Tab>
+        </Tabs.Tab>
       </Tabs>
       <p>{product.description}</p>
       <div>
