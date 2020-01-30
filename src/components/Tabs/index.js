@@ -8,23 +8,29 @@ const TabsContext = React.createContext({
   handleTabClick: null,
 })
 
-const Tab = ({ name, initialActive, children }) => {
+const Tab = ({ name, initialActive, heading, children }) => {
   return (
     <TabsContext.Consumer>
       {context => {
+        if (!context.activeName && initialActive) {
+          if (context.handleTabClick) {
+            context.handleTabClick(name, children)
+            return null
+          }
+        }
+
         const activeName = context?.activeName || initialActive || name || ''
 
         const handleTabClick = e => {
           console.log('clicou')
-          context.handleTabClick(name)
+          context.handleTabClick(name, children)
         }
-        console.log('ativo :', activeName)
 
         return (
           <li
             onClick={handleTabClick}
             className={name === activeName ? 'active' : ''}>
-            {children}
+            {heading()}
           </li>
         )
       }}
@@ -42,16 +48,18 @@ const Tabs = ({ headings, children }) => {
     headings?.length > 0 ? headings[0] : '',
   )
 
-  console.log('activeName :', activeName)
+  const [activeContent, setActiveContent] = useState('')
 
-  const handleTabClick = name => {
+  const handleTabClick = (name, content) => {
     setActiveName(name)
+    setActiveContent(content)
   }
 
   return (
     <TabsContext.Provider
       value={{ activeName: activeName || '', handleTabClick }}>
       <ul className="tabs">{children}</ul>
+      <div>{activeContent}</div>
     </TabsContext.Provider>
   )
 }
